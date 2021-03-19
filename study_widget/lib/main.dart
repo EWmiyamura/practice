@@ -1,63 +1,82 @@
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
+
+//メイン関数、実行時に最初に呼ばれる
+// runAppメソッドは引数の Widgetをスクリーンにアタッチする
+// runAppメソッドの引数の Widgetが画面いっぱいに表示される
 void main() => runApp(MyApp());
+
+// runAppの引数として生成され、最初にインスタンス化されるクラス
 class MyApp extends StatelessWidget {
+  //このメソッドでリターンしたWidgetがメイン画面になる
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Startup Name Generator',
-        home: RandomWords()
-    );
-  }
-}
-class RandomWordsState extends State<RandomWords> {
-  final _suggestions = <WordPair>[];
-  final _biggerFont = const TextStyle(fontSize: 18.0);
-  @override
-  Widget build(BuildContext context) {  return Scaffold(
-    appBar: AppBar(
-      title: Text('Startup Name Generator'),
-    ),
-    body: _buildSuggestions(),
-  );
-  }
-  Widget _buildSuggestions() {
-    return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemBuilder: (context, i) {
-          if (i.isOdd) return Divider();
-          final index = i ~/ 2;
-          if (index >= _suggestions.length) {
-            _suggestions.addAll(generateWordPairs().take(10));
-          }
-          return _buildRow(_suggestions[index]);
-        });
-  }
-  Widget _buildRow(WordPair pair) {
-    return ListTile(
-      title: Text(
-        pair.asPascalCase,
-        style: _biggerFont,
+    //MaterialAppで画面のテーマ等を設定できる
+    return new MaterialApp(
+      title: 'Flutter Demo',
+      theme: new ThemeData(
+        primarySwatch: Colors.red,
       ),
+      home: new MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
-class RandomWords extends StatefulWidget {
+
+// MaterialAppにセットされるホーム画面
+class MyHomePage extends StatefulWidget {
+  //コンストラクト
+  MyHomePage({Key key, this.title}) : super(key: key);
+
+  // 定数定義
+  final String title;
+
+  //アロー関数を用いて、Stateを呼ぶ
   @override
-  RandomWordsState createState() => new RandomWordsState();
+  _MyHomePageState createState() => new _MyHomePageState();
 }
 
+//Widgetから呼ばれるStateクラス
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+  List<String> _data;
 
+  //メソッドの定義
+  void _incrementCounter() {
+    //　画面の再描画を実行する
+    setState(() {
+      _counter++;
+    });
+  }
 
-
-
-
-
-
-
-
-
-
-
-
-
+  @override
+  Widget build(BuildContext context) {
+    //デザインWidget
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text(widget.title),
+      ),
+      body: new Center(
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Text(
+              'You have pushed the button this many times:',
+            ),
+            new Text(
+              _data.length.toString(),
+            ),
+            new Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.display1,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: new FloatingActionButton(
+        //定義した再描画メソッドをボタン押下時のアクションにセット
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: new Icon(Icons.add),
+      ), //This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
