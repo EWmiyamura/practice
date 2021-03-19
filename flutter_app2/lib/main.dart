@@ -1,65 +1,57 @@
 import 'package:flutter/material.dart';
 
-void main(){
-  runApp(MaterialApp(
-    title: 'Flutter Tutorial',
-    home: TutorialHome(),
-  ));
+void main() {
+  runApp(MaterialApp());
 }
 
-class TutorialHome extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+class GithubRepository {
+  /// Repository full name.
+  final String fullName;
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          tooltip: 'Navigation menu',
-          onPressed: null,
-        ),
-      title:Text('Example title'),
-      actions: <Widget>[
-        IconButton(
-          icon: Icon(Icons.search),
-          tooltip: 'Search',
-          onPressed: null,
-        ),
-        MyButton(),
-      ],
-    ),
-    body:Center(
-      child: Text('Hello world!'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Add',
-        child: Icon(Icons.add),
-        onPressed: null,
-      ),
-    );
-  }
+  /// Repository description.
+  final String description;
+
+  /// Language in use.
+  final String language;
+
+  /// Repository html url.
+  final String htmlUrl;
+
+  ///Count of stars.
+  final int stargazersCount;
+
+  ///Count of watchers.
+  final int watchersCount;
+
+  ///Count of forks repository.
+  final int forksCount;
+
+  GithubRepository.fromJson(Map<String, dynamic> json)
+      : fullName = json['full_name'],
+        description = json['description'],
+        language = json['language'],
+        htmlUrl = json['html_url'],
+        stargazersCount = json['stargazers_count'],
+        watchersCount = json['watchers_count'],
+        forksCount = json['forks_count'];
 }
 
-class MyButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context){
-    return GestureDetector(
-      onTap: ()
-    {
-      print('MyButton was tapped!');
-    },
-    child: Container(
-      height: 36.0,
-      padding: const EdgeInsets.all(8.0),
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5.0),
-        color: Colors.lightGreen[500],
-      ),
-      child: Center(
-        child: Text('Engage'),
-      ),
-    ),
-    );
-  }
+Widget_buildInput() {
+  return Container(
+      margin: EdgeInsets.all(16.0),
+      child: TextFirld(
+        decoraton: InputDecoration(
+            prefixIcon: Icon(Icon, search),
+            hintText: 'Please enter a search repository name',
+            labelText: "search"),
+        onChanged: (inputString) {
+          if (inputString.length >= 5) {
+            _searchRepositories(inputString).then((repositories) {
+              setState(() {
+                _repositories = repositories;
+              });
+            });
+          }
+        },
+      ));
 }
